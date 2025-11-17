@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Post Form</title>
+</head>
+<body>
+
+  <h2>Create a Post</h2>
+
+  <form id="postForm">
+    <label>Title:</label><br>
+    <input type="text" id="title" required><br><br>
+
+    <label>Body:</label><br>
+    <textarea id="body" required></textarea><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="message" style="color: green; font-weight: bold;"></p>
+
+  <script>
+    document.getElementById('postForm').addEventListener('submit', async function(e) {
+      e.preventDefault(); // prevent page reload
+
+      const data = {
+        title: document.getElementById('title').value,
+        body: document.getElementById('body').value
+      };
+
+      try {
+        const response = await fetch('/post', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          document.getElementById('message').textContent = "Post submitted successfully!";
+        } else {
+          document.getElementById('message').textContent = "Error submitting post.";
+          document.getElementById('message').style.color = "red";
+        }
+      } catch (error) {
+        document.getElementById('message').textContent = "Network error!";
+        document.getElementById('message').style.color = "red";
+      }
+    });
+  </script>
+
+</body>
+</html>
